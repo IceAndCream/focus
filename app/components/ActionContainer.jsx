@@ -10,7 +10,7 @@ export default function ActionContainer(props: Props) {
   return (
     <div className={styles.actionContainer}>
       <div className={styles.children}>{props.children}</div>
-      <Menu className={styles.menu} />
+      {/* <Menu className={styles.menu} /> */}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 // @flow
 import { connect } from 'react-redux';
-import Home from '../components/Home';
+import Tasks from '../components/Tasks';
 
 const mapStateToProps = state => {
   const current = state.tasks.rows.find(
@@ -8,8 +8,8 @@ const mapStateToProps = state => {
   );
   return {
     counting: state.tasks.counting,
-    current
+    current: state.tasks.timeInfo,
   };
 };
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps)(Tasks);

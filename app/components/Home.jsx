@@ -18,6 +18,7 @@ type Props = {
 
 export default function Home(props: Props) {
   const { current, counting, dispatch } = props;
+
   if (!current) {
     return (
       <div className={styles.empty}>

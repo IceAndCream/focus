@@ -1,7 +1,8 @@
 import * as React from 'react';
 import * as classnames from 'classnames';
+import CountDown from './CountDown';
 import * as styles from './SearchInput.scss';
-import Search from './svgrs/search';
+import Settings from './svgrs/settings';
 import Add from './svgrs/add';
 
 type Props = {
@@ -26,7 +27,7 @@ export default class Input extends React.Component<Props, State> {
     this.state = {
       typing: false,
       editting: false,
-      value: defaultValue || ''
+      value: defaultValue || '',
     };
   }
 
@@ -104,10 +105,10 @@ export default class Input extends React.Component<Props, State> {
     });
     return (
       <div onClick={this.onClick} className={cls}>
-        <Search className={styles.searchIcon} />
+        <Settings className={styles.searchIcon} />
         {
           <input
-            type="text"
+            type="number"
             value={this.state.value}
             ref={this.inputRef}
             onKeyUp={this.onKeyUp}

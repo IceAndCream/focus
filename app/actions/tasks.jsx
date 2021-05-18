@@ -1,5 +1,5 @@
 // @flow
-import { GEN_TASK } from '../utils';
+import { GEN_TASK, GEN_TIME } from '../utils';
 
 export const SELECT_TASK = 'SELECT_TASK';
 export const TOGGLE_STATE = 'TOGGLE_STATE';
@@ -7,7 +7,14 @@ export const ADD_TASK = 'ADD_TASK';
 export const REMOVE_TASK = 'REMOVE_TASK';
 export const TOGGLE_COUNTING = 'TOGGLE_COUNTING';
 export const UPDATE_TASK_NAME = 'UPDATE_TASK_NAME';
+export const SET_TIME = 'SET_TIME';
 
+export function setTimeByCount(time: Number) {
+  return {
+    type: SET_TIME,
+    payload: GEN_TIME(time)
+  }
+}
 export function addTaskByName(name: string) {
   return {
     type: ADD_TASK,

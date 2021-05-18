@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import * as classnames from 'classnames';
 import SearchInput from './SearchInput';
+import CountDown from './CountDown';
 import type { Task } from '../reducers/types';
 import {
   addTaskByName,
   removeTask,
   toggleState,
-  selectTask
+  selectTask,
+  setTimeByCount,
+  toggleCounting
 } from '../actions/tasks';
 import Play from './svgrs/play-shape';
 import Delete from './svgrs/delete';
@@ -25,7 +28,7 @@ type State = {
   displayRows: Task[]
 };
 
-export default class Home extends Component<Props, State> {
+export default class Tasks extends Component<Props, State> {
   static defaultProps = {
     rows: [],
     current: {}
@@ -50,6 +53,10 @@ export default class Home extends Component<Props, State> {
     this.props.dispatch(addTaskByName(name));
   };
 
+  setTime = (time: Number) => {
+    this.props.dispatch(setTimeByCount(time))
+  }
+
   handleRemove = (id: string) => {
     this.props.dispatch(removeTask(id));
   };
@@ -62,7 +69,8 @@ export default class Home extends Component<Props, State> {
 
   handleSubmit = (value: string) => {
     if (value && value.trim()) {
-      this.createTask(value);
+      // this.createTask(value);
+      this.setTime(value);
       this.handleSeachChange('');
     }
   };
@@ -78,53 +86,24 @@ export default class Home extends Component<Props, State> {
 
   render() {
     const { displayRows } = this.state;
-    const { rows } = this.props;
+    const { rows, current, counting, time, dispatch } = this.props;
+
+    const { plan, remain } = current;
+
     return (
       <div className={styles.container}>
         <SearchInput
           value={this.state.search}
           onChange={this.handleSeachChange}
           onSubmit={this.handleSubmit}
-          placeholder="搜索/创建任务"
+          placeholder="倒计时（分钟）"
         />
-        <div className={styles.listWrapper}>
-          <div className={styles.stickyHeader}>{rows.length} 个任务</div>
-          <ul className={styles.list}>
-            {displayRows.map(row => {
-              const { done, remain } = row;
-              const itemCls = classnames(styles.item, {
-                [styles.done]: done
-              });
-              return (
-                <li key={row.id} className={itemCls}>
-                  {row.name}
-                  <div className={styles.operation}>
-                    {done ? (
-                      <Tick
-                        disabled
-                        onClick={() => remain > 0 && this.toggleState(row.id)}
-                      />
-                    ) : (
-                      <TickBox
-                        disabled={remain === 0}
-                        onClick={() => remain > 0 && this.toggleState(row.id)}
-                      />
-                    )}
-                    <Play
-                      fill="#2B69B1"
-                      disabled={done}
-                      onClick={() => !done && this.selectTask(row.id)}
-                    />
-                    <Delete
-                      fill="#E74424"
-                      onClick={() => this.handleRemove(row.id)}
-                    />
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+        <CountDown
+          plan={plan}
+          remain={remain}
+          counting={counting}
+          onToggleCounting={() => dispatch(toggleCounting())}
+        />
       </div>
     );
   }

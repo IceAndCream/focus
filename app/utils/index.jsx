@@ -8,3 +8,12 @@ export const GEN_TASK = name => ({
   remain: 25 * 60,
   done: false
 });
+
+export const GEN_TIME = time => ({
+  // name,
+  // id: v4(),
+  // created_at: +new Date(),
+  plan: time * 60,
+  remain: time * 60,
+  done: false
+});

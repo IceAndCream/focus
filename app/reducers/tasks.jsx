@@ -4,7 +4,8 @@ import {
   REMOVE_TASK,
   TOGGLE_STATE,
   TOGGLE_COUNTING,
-  UPDATE_TASK_NAME
+  UPDATE_TASK_NAME,
+  SET_TIME
 } from '../actions/tasks';
 import type { Action, Task } from './types';
 import { TICK } from '../utils/actionTypes';
@@ -13,12 +14,14 @@ interface INITIAL_STATE {
   rows: Task[];
   currentId: string;
   counting: boolean;
+  timeInfo: Object;
 }
 
 const initialState: INITIAL_STATE = {
   rows: [],
   currentId: '',
-  counting: true
+  counting: true,
+  timeInfo: {},
 };
 
 const sortBy = (a: Task, b: Task) => {
@@ -39,6 +42,12 @@ export default function tasksReducer(
   action: Action
 ) {
   switch (action.type) {
+    case SET_TIME:
+      return {
+        ...state,
+        timeInfo: action.payload,
+        counting: true,
+      }
     case TOGGLE_COUNTING:
       return {
         ...state,
@@ -99,7 +108,12 @@ export default function tasksReducer(
                 }
               : task
           )
-          .sort(sortBy)
+          .sort(sortBy),
+        timeInfo: state.counting && !state.timeInfo.done ? {
+          ...state.timeInfo,
+          remain: Math.max(state.timeInfo.remain - 1, 0),
+          done: state.timeInfo.remain === 0
+        } : state.timeInfo
       };
     case '@@INIT':
       return {
